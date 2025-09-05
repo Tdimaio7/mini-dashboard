@@ -1,0 +1,9 @@
+{"ts":"2025-09-05T19:28:19.755Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":422,"duration_ms":1694,"headers":{}}
+{"ts":"2025-09-05T19:36:12.150Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":422,"duration_ms":380,"headers":{}}
+{"ts":"2025-09-05T19:36:14.515Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":422,"duration_ms":195,"headers":{}}
+{"ts":"2025-09-05T19:37:39.245Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":422,"duration_ms":387,"headers":{}}
+{"ts":"2025-09-05T19:42:32.763Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":200,"duration_ms":336,"headers":{}}
+{"ts":"2025-09-05T21:28:30.721Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":200,"duration_ms":3116,"headers":{}}
+{"ts":"2025-09-05T21:50:13.120Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":200,"duration_ms":471,"headers":{}}
+{"ts":"2025-09-05T21:50:32.440Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/ethereum/market_chart","status":200,"duration_ms":1396,"headers":{}}
+{"ts":"2025-09-05T21:54:10.307Z","method":"GET","url_base":"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart","status":200,"duration_ms":297,"headers":{}}
