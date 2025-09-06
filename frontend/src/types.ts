@@ -1,10 +1,10 @@
-export type CoinData = {
+export interface CoinData {
   date: string;
   coin: string;
   price: number;
   volume: number;
   market_cap: number;
-};
+}
 
 // Para transformaciones
 export type AvgByDay = {

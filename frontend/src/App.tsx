@@ -5,8 +5,11 @@ import {
   topNByMarketCap,
   dailyPercentChangeByCoin,
   normalizeByCoin,
-  joinByDateCoin
 } from "./utils/transform";
+import { Charts } from './components/charts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AA336A'];
 
 function App() {
   const { data, loading, error } = useFetchData("http://localhost:3001/mock");
@@ -15,122 +18,68 @@ function App() {
   if (error) return <p>Error: {error}</p>;
   if (!data || data.length === 0) return <p>No data available</p>;
 
-  // Transformaciones 
-  const avgByDay = averagePriceByDay(data);
+  // --- Transformaciones ---
+  const avgByDay = averagePriceByDay(data).map(item => ({
+    ...item,
+    coin: "all",
+  }));
+
   const rollingPrice = rollingAverageByCoin(data, "price");
-  const topByMarketCap = topNByMarketCap(data);
   const dailyChange = dailyPercentChangeByCoin(data, "price");
   const normalizedPrice = normalizeByCoin(data, "price");
-
-  const joinedData = joinByDateCoin(data, data);
+  const topByMarketCap = topNByMarketCap(data);
 
   return (
-    <div>
+    <div className="app-container">
       <h1>Mini Dashboard</h1>
 
-      <h2>Tabla Original</h2>
-      <table border={1}>
-        <thead>
-          <tr>
-            <th>date</th><th>coin</th><th>price</th><th>volume</th><th>market_cap</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.date}</td>
-              <td>{item.coin}</td>
-              <td>{item.price}</td>
-              <td>{item.volume}</td>
-              <td>{item.market_cap}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Líneas */}
+      <h2>Gráfica Promedio por Día</h2>
+      <Charts data={avgByDay} xKey="date" yKey="avgPrice" groupKey="coin" />
 
-      <h2>Promedio por Día</h2>
-      <table border={1}>
-        <thead><tr><th>date</th><th>avgPrice</th></tr></thead>
-        <tbody>
-          {avgByDay.map((item, idx) => (
-            <tr key={idx}><td>{item.date}</td><td>{item.avgPrice}</td></tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>Gráfica Media Móvil por Coin</h2>
+      <Charts data={rollingPrice} xKey="date" yKey="value" groupKey="coin" />
 
-      <h2>Media Móvil (Precio) por Coin</h2>
-      <table border={1}>
-        <thead><tr><th>coin</th><th>date</th><th>value</th></tr></thead>
-        <tbody>
-          {rollingPrice.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.coin}</td>
-              <td>{item.date}</td>
-              <td>{item.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>Gráfica Cambio Porcentual Diario por Coin</h2>
+      <Charts data={dailyChange} xKey="date" yKey="change" groupKey="coin" />
 
-      <h2>Top 5 por Market Cap</h2>
-      <table border={1}>
-        <thead><tr><th>date</th><th>coin</th><th>price</th><th>volume</th><th>market_cap</th></tr></thead>
-        <tbody>
-          {topByMarketCap.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.date}</td>
-              <td>{item.coin}</td>
-              <td>{item.price}</td>
-              <td>{item.volume}</td>
-              <td>{item.market_cap}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>Gráfica Precio Normalizado por Coin</h2>
+      <Charts data={normalizedPrice} xKey="date" yKey="normalized" groupKey="coin" />
 
-      <h2>Cambio Porcentual Diario (Precio) por Coin</h2>
-      <table border={1}>
-        <thead><tr><th>coin</th><th>date</th><th>change (%)</th></tr></thead>
-        <tbody>
-          {dailyChange.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.coin}</td>
-              <td>{item.date}</td>
-              <td>{item.change.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Barra */}
+      <h2>Top 5 por Market Cap (Barras)</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={topByMarketCap}>
+          <XAxis dataKey="coin" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="market_cap" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
 
-      <h2>Precio Normalizado por Coin</h2>
-      <table border={1}>
-        <thead><tr><th>coin</th><th>date</th><th>normalized</th></tr></thead>
-        <tbody>
-          {normalizedPrice.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.coin}</td>
-              <td>{item.date}</td>
-              <td>{item.normalized.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h2>Join de Mock consigo mismo</h2>
-      <table border={1}>
-        <thead><tr><th>date</th><th>coin</th><th>price</th><th>volume</th><th>market_cap</th></tr></thead>
-        <tbody>
-          {joinedData.map((item, idx) => (
-            <tr key={idx}>
-              <td>{item.date}</td>
-              <td>{item.coin}</td>
-              <td>{item.price}</td>
-              <td>{item.volume}</td>
-              <td>{item.market_cap}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Donut/Pie */}
+      <h2>Distribución de Volumen por Coin (Donut)</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={topByMarketCap}
+            dataKey="volume"
+            nameKey="coin"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            fill="#8884d8"
+            label
+          >
+            {topByMarketCap.map((_, idx) => (
+              <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 }
