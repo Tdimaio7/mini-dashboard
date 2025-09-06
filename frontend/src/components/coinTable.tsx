@@ -1,33 +1,28 @@
-import React from "react";
-import type { CoinData } from "../hooks/useFetchData";
+type CoinTableProps<T extends object> = {  
+  data: T[];
+};
 
-interface Props {
-  data: CoinData[];
-}
+export function CoinTable<T extends object>({ data }: CoinTableProps<T>) { 
+  if (!data.length) return <p>No data available</p>;
 
-export const CoinTable: React.FC<Props> = ({ data }) => {
   return (
     <table>
       <thead>
         <tr>
-          <th>Date</th>
-          <th>Coin</th>
-          <th>Price</th>
-          <th>Volume</th>
-          <th>Market Cap</th>
+          {Object.keys(data[0]).map((key) => (
+            <th key={key}>{key}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((item, idx) => (
-          <tr key={idx}>
-            <td>{item.date}</td>
-            <td>{item.coin}</td>
-            <td>{item.price}</td>
-            <td>{item.volume}</td>
-            <td>{item.market_cap}</td>
+        {data.map((row, i) => (
+          <tr key={i}>
+            {Object.values(row).map((val, j) => (
+              <td key={j}>{val}</td>
+            ))}
           </tr>
         ))}
       </tbody>
     </table>
   );
-};
+}

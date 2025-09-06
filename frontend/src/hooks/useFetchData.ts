@@ -1,45 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import type { CoinData } from "../types";
 
-export interface CoinData {
-  date: string;
-  coin: string;
-  price: number;
-  volume: number;
-  market_cap: number;
-}
-
-interface FetchResult {
-  data: CoinData[] | null;
-  loading: boolean;
-  error: string | null;
-}
-
-export const useFetchData = (url: string): FetchResult => {
-  const [data, setData] = useState<CoinData[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+export function useFetchData(url: string) {
+  const [data, setData] = useState<CoinData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Error fetching data");
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const json = await res.json();
-        setData(json.items);
+        setData(json.items || []);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Unknown error");
-        }
+        setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [url]);
 
   return { data, loading, error };
-};
+}

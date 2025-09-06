@@ -1,4 +1,4 @@
-export type CoinItem = {
+export type CoinData = {
   date: string;
   coin: string;
   price: number;
@@ -6,6 +6,13 @@ export type CoinItem = {
   market_cap: number;
 };
 
-export type CoinData = {
-  items: CoinItem[];
+// Para transformaciones
+export type AvgByDay = {
+  date: string;
+  avgPrice: number;
+};
+
+export type RollingValue = {
+  date: string;
+  value: number;
 };
