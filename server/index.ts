@@ -2,9 +2,13 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Habilitar CORS para todas las solicitudes
+app.use(cors());
 
 // Carpeta de logs
 const logDir = path.join(__dirname, 'logs');
