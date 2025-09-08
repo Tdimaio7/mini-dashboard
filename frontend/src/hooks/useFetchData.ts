@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
-import type { CoinData } from "../types";
 
-export function useFetchData(url: string) {
-  const [data, setData] = useState<CoinData[]>([]);
+export const useFetchData = <T>(url: string) => {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const res = await fetch(url);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const json = await res.json();
-        setData(json.items || []);
+        if (!res.ok) throw new Error(`Error fetching data: ${res.statusText}`);
+        const json = (await res.json()) as T;
+        setData(json);
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : "Unknown error");
+        if (err instanceof Error) setError(err.message);
+        else setError("Unknown error");
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [url]);
 
   return { data, loading, error };
-}
+};
