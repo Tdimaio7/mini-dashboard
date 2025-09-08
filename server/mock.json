@@ -1,0 +1,8 @@
+{
+  "items": [
+    { "date": "2025-08-01", "coin": "bitcoin", "price": 50000, "volume": 3500000, "market_cap": 900000000 },
+    { "date": "2025-08-02", "coin": "bitcoin", "price": 51000, "volume": 3600000, "market_cap": 910000000 },
+    { "date": "2025-08-01", "coin": "ethereum", "price": 4000, "volume": 1500000, "market_cap": 450000000 },
+    { "date": "2025-08-02", "coin": "ethereum", "price": 4100, "volume": 1600000, "market_cap": 460000000 }
+  ]
+}
